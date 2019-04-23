@@ -19,7 +19,7 @@ Thanks to @warmspringwinds for the initial version of script.
 
 ## Install the latest version
 ```bash
-pip install --upgrade git+https://github.com/sovrasov/flops-counter.pytorch.git
+pip install --upgrade git+https://github.com/zhouyuangan/flops-counter.pytorch.git
 ```
 
 ## Example
