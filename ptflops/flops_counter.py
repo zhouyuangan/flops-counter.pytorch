@@ -3,7 +3,7 @@ import torch
 import numpy as np
 
 def get_model_complexity_info(model, input_res, print_per_layer_stat=True, as_strings=True,
-                              input_constructor=None):
+                              input_constructor=None, is_cuda=False):
     assert type(input_res) is tuple
     assert len(input_res) == 2
     flops_model = add_flops_counting_methods(model)
@@ -12,7 +12,10 @@ def get_model_complexity_info(model, input_res, print_per_layer_stat=True, as_st
         input = input_constructor(input_res)
         _ = flops_model(**input)
     else:
-        batch = torch.FloatTensor(1, 3, *input_res)
+        if is_cuda:
+            batch = torch.FloatTensor(1, 3, *input_res).cuda()
+        else:
+            batch = torch.FloatTensor(1, 3, *input_res)
         _ = flops_model(batch)
 
     if print_per_layer_stat:
