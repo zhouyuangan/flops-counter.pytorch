@@ -6,6 +6,8 @@ def get_model_complexity_info(model, input_res, print_per_layer_stat=True, as_st
                               input_constructor=None, is_cuda=False):
     assert type(input_res) is tuple
     assert len(input_res) == 2
+    if is_cuda and not model.is_cuda:
+        model = model.cuda()
     flops_model = add_flops_counting_methods(model)
     flops_model.eval().start_flops_count()
     if input_constructor:
