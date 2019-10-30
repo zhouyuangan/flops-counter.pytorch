@@ -2,11 +2,22 @@ import torch.nn as nn
 import torch
 import numpy as np
 
+
 def get_model_complexity_info(model, input_res, print_per_layer_stat=True, as_strings=True,
                               input_constructor=None, is_cuda=False):
+    """
+
+    :param model:
+    :param input_res:
+    :param print_per_layer_stat:
+    :param as_strings:
+    :param input_constructor:
+    :param is_cuda: model and input both put on GPUs
+    :return:
+    """
     assert type(input_res) is tuple
-    assert len(input_res) == 2
-    if is_cuda and not model.is_cuda:
+    assert len(input_res) == 3
+    if is_cuda:
         model = model.cuda()
     flops_model = add_flops_counting_methods(model)
     flops_model.eval().start_flops_count()
@@ -15,9 +26,9 @@ def get_model_complexity_info(model, input_res, print_per_layer_stat=True, as_st
         _ = flops_model(**input)
     else:
         if is_cuda:
-            batch = torch.FloatTensor(1, 3, *input_res).cuda()
+            batch = torch.FloatTensor(1, *input_res).cuda()
         else:
-            batch = torch.FloatTensor(1, 3, *input_res)
+            batch = torch.FloatTensor(1, *input_res)
         _ = flops_model(batch)
 
     if print_per_layer_stat:
